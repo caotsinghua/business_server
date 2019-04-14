@@ -1,0 +1,10 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "tssword",
+    "password": "123123..",
+    "database": "business_system",
+    "synchronize": true,
+    "entities": ["./dist/entities/**/*{.ts,.js}"]
+}
