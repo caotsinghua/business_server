@@ -5,9 +5,12 @@ import {
     CreateDateColumn,
     ManyToOne,
     ManyToMany,
+    OneToOne,
+    JoinColumn,
 } from 'typeorm';
 import { User } from './User';
 import { Group } from './Group';
+import { Account } from './Account';
 // 机构客户
 @Entity()
 export class DepartmentCustomer {
@@ -29,4 +32,7 @@ export class DepartmentCustomer {
     description: string; //备注
     @ManyToOne(type => User, manager => manager.department_customers)
     manager: User;
+    @OneToOne(type => Account)
+    @JoinColumn()
+    account: Account;
 }

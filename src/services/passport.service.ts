@@ -37,7 +37,7 @@ passport.use(
             try {
                 const userRepository = getRepository(User);
                 const user = await userRepository.findOne({
-                    relations: ['bank'],
+                    relations: ['bank', 'job'],
                     where: { job_number },
                 });
                 if (!user) {
@@ -45,6 +45,9 @@ passport.use(
                 }
                 if (user.password !== password) {
                     return done(null, false, { message: '密码错误' });
+                }
+                if (user.id!==1&&!user.job) {
+                    return done(null, false, { message: '用户还没有岗位，请联系主管设置。' });
                 }
                 delete user.password;
                 return done(null, user);

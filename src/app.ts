@@ -13,10 +13,17 @@ import { handleApiResponse, handleError, handleCors, authenticated } from './mid
 import aclRouter from './routers/acl.router';
 import userRouter from './routers/user.router';
 import banksRouter from './routers/banks.router';
+import customersRouter from './routers/customers.router';
+import groupModelRouter from './routers/groupModel.router';
+import activitiesRouter from './routers/activities.router';
+import verifyRouter from './routers/verify.router';
+import noticesRouter from './routers/notices.router';
+
 const app = express();
 
 const acl = new Acl(new Acl.memoryBackend());
 acl.allow(aclConfig);
+acl.addUserRoles(1, 'root');
 const glob: Global = global;
 glob.acl = acl;
 
@@ -42,6 +49,11 @@ app.use(passport.session());
 app.use('/acl', authenticated, aclRouter);
 app.use('/user', userRouter);
 app.use('/banks', banksRouter);
+app.use('/customers', customersRouter);
+app.use('/groupModels', groupModelRouter);
+app.use('/activities', activitiesRouter);
+app.use('/verifies', verifyRouter);
+app.use('/notices', noticesRouter);
 // 错误处理
 app.use(handleError);
 

@@ -1,15 +1,15 @@
 const aclConfig: any[] = [
     {
-        roles: ['root_bank_leader'], //总行leader
+        roles: ['leader'], //银行leader
         allows: [
             {
-                resources: ['/kids/:kidId/createCard'],
+                resources: ['/banks/:bankId'],
                 permissions: '*',
             },
         ],
     },
     {
-        roles: ['bank_leader'], // 分行leader
+        roles: ['verifyer'], // 审核员
         allows: [
             {
                 resources: '/kids/byParent',

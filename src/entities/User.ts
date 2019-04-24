@@ -1,9 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    OneToMany,
+    CreateDateColumn,
+    OneToOne,
+} from 'typeorm';
 import { Bank } from './Bank';
 import { Job } from './Job';
 import { SEX } from '../types/enum';
 import { Customer } from './Customer';
 import { DepartmentCustomer } from './DepartmentCustomer';
+import { SaleActivity } from './SaleActivity';
+import { Verify } from './Verify';
+import { Group } from './Group';
+import { Notice } from './Notice';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -30,9 +42,7 @@ export class User {
         nullable: true,
     })
     certificate_card: string; //身份证号
-    @Column({
-        nullable: true,
-    })
+    @CreateDateColumn()
     join_date: Date; //入行时间
     @Column({
         nullable: true,
@@ -62,4 +72,14 @@ export class User {
     customers: Customer[];
     @OneToMany(type => DepartmentCustomer, dc => dc.manager)
     department_customers: DepartmentCustomer[];
+    @OneToMany(type => SaleActivity, activity => activity.creater)
+    sale_activities: SaleActivity[];
+    @OneToMany(type => SaleActivity, activity => activity.manager)
+    manager_activities: SaleActivity[];
+    @OneToMany(type => Verify, verify => verify.verifyer)
+    verify_items: Verify[]; //审核的信息
+    @OneToMany(type => Notice, notice => notice.from)
+    sended_notices: Notice[];
+    @OneToMany(type => Notice, notice => notice.to)
+    received_notices: Notice[];
 }

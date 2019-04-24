@@ -2,10 +2,11 @@ import { Req, Res, Global } from '../types';
 import { getRepository } from 'typeorm';
 import { User } from '../entities/User';
 
-const glob: Global = global;
-const acl = glob.acl;
 // 权限管理中间件
 export const aclAuthenticated = async (req: Req, res: Res, next: any) => {
+
+    const glob: Global = global;
+    const acl = glob.acl;
     const userRepository = getRepository(User);
     let resource = req.baseUrl;
     if (req.route) {

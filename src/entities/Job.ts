@@ -11,6 +11,10 @@ export class Job {
     title: string; // 职称
     @Column()
     post: string; // 职务- role
+    @Column({
+        default: 'user',
+    })
+    role: string; //权限角色
     @ManyToOne(type => Bank, bank => bank.jobs)
-    department: Bank; // 所属机构
+    bank: Bank; // 所属机构
 }
