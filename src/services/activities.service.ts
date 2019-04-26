@@ -4,6 +4,7 @@ import { User } from '../entities/User';
 import { Group } from '../entities/Group';
 import { Verify } from '../entities/Verify';
 import { VERIFY_STATUS, ACTIVITY_STATUS } from '../types/enum';
+import { ActivityWithCustomer } from '../entities/ActivityWithCustomer';
 export async function createActivity(
     job_number: number,
     {
@@ -33,7 +34,15 @@ export async function createActivity(
             },
         });
         const { bank } = creater;
-        const group = await manager.findOne(Group, groupId);
+        const group = await manager.findOne(Group, {
+            relations: ['customers', 'department_customers'],
+            where: {
+                id: groupId,
+            },
+        });
+        // 获得客户群，创建每个客户和活动的关联
+        const { customers, department_customers } = group;
+        const people: any[] = customers.length > 0 ? customers : department_customers;
         let verify_data = manager.create(Verify, {});
         verify_data = await manager.save(verify_data);
         activity = manager.create(SaleActivity, {
@@ -49,6 +58,16 @@ export async function createActivity(
             name,
         });
         activity = await manager.save(activity);
+        // 保存联系
+        await Promise.all(
+            people.map(person => {
+                const relation = manager.create(ActivityWithCustomer, {
+                    customerId: person.id,
+                    activityId: activity.id,
+                });
+                return manager.save(relation);
+            }),
+        );
     });
     return activity;
 }

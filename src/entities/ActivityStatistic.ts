@@ -15,11 +15,11 @@ export class ActivityStatistic {
     @Column({
         default: 0,
     })
-    contacted_back_count: number; // 接触响应数
+    joined_count: number; //参与活动数
     @Column({
         default: 0,
     })
-    joined_count: number; //参与活动数
+    target_money: number; //目标转入资金
     @Column({
         default: 0,
     })

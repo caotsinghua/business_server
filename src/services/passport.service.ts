@@ -46,7 +46,7 @@ passport.use(
                 if (user.password !== password) {
                     return done(null, false, { message: '密码错误' });
                 }
-                if (user.id!==1&&!user.job) {
+                if (user.id !== 1 && !user.job) {
                     return done(null, false, { message: '用户还没有岗位，请联系主管设置。' });
                 }
                 delete user.password;

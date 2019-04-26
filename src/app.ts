@@ -18,6 +18,7 @@ import groupModelRouter from './routers/groupModel.router';
 import activitiesRouter from './routers/activities.router';
 import verifyRouter from './routers/verify.router';
 import noticesRouter from './routers/notices.router';
+import statisticRouter from './routers/statistic.router';
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.use('/groupModels', groupModelRouter);
 app.use('/activities', activitiesRouter);
 app.use('/verifies', verifyRouter);
 app.use('/notices', noticesRouter);
+app.use('/statistic', statisticRouter);
 // 错误处理
 app.use(handleError);
 
