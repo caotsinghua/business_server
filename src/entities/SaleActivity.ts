@@ -48,10 +48,16 @@ export class SaleActivity {
         nullable: true,
     })
     other_data: string; //备注
-    @Column()
+    @Column({
+        nullable: true,
+    })
     target: string; //营销目标
     @Column()
     name: string; //活动名称
     @OneToOne(type => ActivityStatistic, statistic => statistic.activity)
     statistic: ActivityStatistic; //活动数据
+    @Column({
+        nullable: true,
+    })
+    file: string; //附件地址
 }

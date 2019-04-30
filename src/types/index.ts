@@ -15,4 +15,5 @@ export interface ResponseJson {
 }
 export interface Global extends NodeJS.Global {
     acl?: any;
+    upload?: any;
 }

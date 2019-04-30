@@ -13,16 +13,16 @@ export async function createActivity(
         groupId,
         description,
         other_data,
-        target,
         name,
+        file,
     }: {
         start_time: Date;
         end_time: Date;
         groupId: number;
         description: string;
         other_data: string;
-        target: string;
         name: string;
+        file: string;
     },
 ) {
     let activity: SaleActivity = null;
@@ -54,8 +54,8 @@ export async function createActivity(
             verify_data,
             group,
             bank,
-            target,
             name,
+            file,
         });
         activity = await manager.save(activity);
         // 保存联系
@@ -149,14 +149,14 @@ export async function updateActivity(
         end_time,
         description,
         other_data,
-        target,
+        file,
     }: {
         name: string;
         start_time: Date;
         end_time: Date;
         description: string;
         other_data: string;
-        target: string;
+        file: string;
     },
 ) {
     return getRepository(SaleActivity).update(activityId, {
@@ -165,6 +165,6 @@ export async function updateActivity(
         end_time,
         description,
         other_data,
-        target,
+        file,
     });
 }

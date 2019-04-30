@@ -7,7 +7,6 @@ import aclConfig from './config/acl.config';
 import session from 'express-session';
 import Acl from 'acl';
 import { Global } from './types';
-
 import { handleApiResponse, handleError, handleCors, authenticated } from './middlewares';
 
 import aclRouter from './routers/acl.router';
@@ -19,10 +18,11 @@ import activitiesRouter from './routers/activities.router';
 import verifyRouter from './routers/verify.router';
 import noticesRouter from './routers/notices.router';
 import statisticRouter from './routers/statistic.router';
-
+import fileRouter from './routers/file.router';
 const app = express();
 
 const acl = new Acl(new Acl.memoryBackend());
+
 acl.allow(aclConfig);
 acl.addUserRoles(1, 'root');
 const glob: Global = global;
@@ -47,6 +47,7 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/files', express.static('files'));
 app.use('/acl', authenticated, aclRouter);
 app.use('/user', userRouter);
 app.use('/banks', banksRouter);
@@ -56,6 +57,7 @@ app.use('/activities', activitiesRouter);
 app.use('/verifies', verifyRouter);
 app.use('/notices', noticesRouter);
 app.use('/statistic', statisticRouter);
+app.use('/upload', fileRouter);
 // 错误处理
 app.use(handleError);
 
