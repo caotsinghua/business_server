@@ -2,8 +2,8 @@ pipeline {
     agent {
         docker {
             image 'kkarczmarczyk/node-yarn'
+            args '-p 4000:4000'
         }
-        args '-p 4000:4000'
     }
 
     environment {
