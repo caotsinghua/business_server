@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 echo '开始安装依赖'
 set -x
-yarn
+npm install
 set +x
 echo '安装依赖完成'
 
