@@ -13,7 +13,8 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh './jenkins/build.sh'
+                sh 'npm install'
+                sh 'npm run build-ts'
             }
         }
         stage('test') {
@@ -24,7 +25,7 @@ pipeline {
         stage('deploy') {
             steps {
                 echo 'Deploying'
-                sh './jenkins/deploy.sh'
+                sh 'node dist/app.js'
             }
         }
     }

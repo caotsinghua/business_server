@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+
 echo '开始安装依赖'
 set -x
 npm install
