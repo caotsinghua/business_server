@@ -19,6 +19,8 @@ import verifyRouter from './routers/verify.router';
 import noticesRouter from './routers/notices.router';
 import statisticRouter from './routers/statistic.router';
 import fileRouter from './routers/file.router';
+import recordsRouter from './routers/records.router';
+import mailRouter from './routers/mail.router';
 const app = express();
 
 const acl = new Acl(new Acl.memoryBackend());
@@ -58,6 +60,8 @@ app.use('/verifies', verifyRouter);
 app.use('/notices', noticesRouter);
 app.use('/statistic', statisticRouter);
 app.use('/upload', fileRouter);
+app.use('/records', recordsRouter);
+app.use('/mail', mailRouter);
 // 错误处理
 app.use(handleError);
 

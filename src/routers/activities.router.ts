@@ -10,6 +10,11 @@ import {
     getActivity,
     getActivities,
     updateActivity,
+    getCustomerActivityRecords,
+    getCustomerRelationActivities,
+    createContactRecord,
+    createActivityCutomerPriority,
+    createMailRecord,
 } from '../services/activities.service';
 
 const activitiesRouter = Router();
@@ -32,6 +37,60 @@ activitiesRouter.get('/', async (req: Req, res: Res, next: any) => {
     try {
         const response = await getActivities(req.query.page, req.query.pageSize);
         res.apiSuccess(response);
+    } catch (e) {
+        next(e);
+    }
+});
+
+activitiesRouter.get('/byCustomerId/:customerId', async (req: Req, res: Res, next: any) => {
+    try {
+        const { customerId } = req.params;
+        const activities = await getCustomerRelationActivities(customerId);
+        res.apiSuccess(activities);
+    } catch (e) {
+        next(e);
+    }
+});
+
+activitiesRouter.get('/:activityId/recordsByCustomer', async (req: Req, res: Res, next: any) => {
+    try {
+        const { activityId } = req.params;
+        const { customerId } = req.query;
+        const records = await getCustomerActivityRecords(customerId, activityId);
+        res.apiSuccess(records);
+    } catch (e) {
+        next(e);
+    }
+});
+
+activitiesRouter.post('/:activityId/records', async (req: Req, res: Res, next: any) => {
+    try {
+        const { activityId } = req.params;
+        const { customerId, type } = req.body;
+        const result = await createContactRecord(customerId, activityId, type);
+        res.apiSuccess(result);
+    } catch (e) {
+        next(e);
+    }
+});
+
+activitiesRouter.post('/:activityId/mailRecord', async (req: Req, res: Res, next: any) => {
+    try {
+        const { activityId } = req.params;
+        const { customerId, to, subject, text, html } = req.body;
+        const result = await createMailRecord(customerId, activityId, { subject, text, html, to });
+        res.apiSuccess(result);
+    } catch (e) {
+        res.apiError({ ...e, code: 400 });
+    }
+});
+
+activitiesRouter.post('/:activityId/customerPriority', async (req: Req, res: Res, next: any) => {
+    try {
+        const { activityId } = req.params;
+        const { customerId, priority } = req.body;
+        const result = await createActivityCutomerPriority(customerId, activityId, priority);
+        res.apiSuccess(result);
     } catch (e) {
         next(e);
     }

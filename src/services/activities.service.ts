@@ -5,6 +5,8 @@ import { Group } from '../entities/Group';
 import { Verify } from '../entities/Verify';
 import { VERIFY_STATUS, ACTIVITY_STATUS } from '../types/enum';
 import { ActivityWithCustomer } from '../entities/ActivityWithCustomer';
+import { ContactRecord } from '../entities/ContactRecord';
+import sendMail from './mail.service';
 export async function createActivity(
     job_number: number,
     {
@@ -167,4 +169,94 @@ export async function updateActivity(
         other_data,
         file,
     });
+}
+// 获取客户（自然人）参加的活动信息
+export async function getCustomerRelationActivities(customerId: number) {
+    let relations = await getRepository(ActivityWithCustomer).find({
+        where: {
+            customerId,
+            joined: true,
+        },
+    });
+    relations = await Promise.all(
+        relations.map(async relation => {
+            const { activityId } = relation;
+            const activity = await getRepository(SaleActivity).findOne(activityId);
+            return {
+                ...relation,
+                activity,
+            };
+        }),
+    );
+    return relations;
+}
+// 获取活动中的客户推荐记录
+export async function getCustomerActivityRecords(customerId: number, activityId: number) {
+    let { records } = await getRepository(ActivityWithCustomer).findOne({
+        relations: ['records'],
+        where: { customerId, activityId },
+    });
+    return records;
+}
+// 根据type执行对应的服务，邮箱，短信，
+// TODO 短信、邮件
+// 废弃-》使用单独的邮件api
+export async function createContactRecord(customerId: number, activityId: number, type: string) {
+    const relation = await getRepository(ActivityWithCustomer).findOne({ customerId, activityId });
+    let record = getManager().create(ContactRecord, {
+        type,
+        relation,
+    });
+    return getManager().save(record);
+}
+
+export async function createMailRecord(
+    customerId: number,
+    activityId: number,
+    {
+        subject,
+        text,
+        html,
+        to,
+    }: {
+        subject: string;
+        text: string;
+        html: string;
+        to: string;
+    },
+) {
+    const relation = await getRepository(ActivityWithCustomer).findOne({ customerId, activityId });
+    const from = '"信大银行营销" 1577499543@qq.com';
+    let record = getManager().create(ContactRecord, {
+        type: 'email',
+        relation,
+        subject,
+        text,
+        html,
+        to,
+    });
+    const result = await sendMail({ from, to, subject, text, html });
+    console.log({ result });
+    return getManager().save(record);
+}
+// 成功还是失败
+export async function updateRecordStatus(recordId: number, success: boolean) {
+    return getManager().update(ContactRecord, recordId, {
+        success,
+    });
+}
+
+//评出优先级
+export async function createActivityCutomerPriority(
+    customerId: number,
+    activityId: number,
+    priority: number,
+) {
+    return getManager().update(
+        ActivityWithCustomer,
+        { customerId, activityId },
+        {
+            priority,
+        },
+    );
 }

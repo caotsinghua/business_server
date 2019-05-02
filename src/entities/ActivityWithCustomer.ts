@@ -1,4 +1,5 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { ContactRecord } from './ContactRecord';
 @Entity()
 export class ActivityWithCustomer {
     @PrimaryColumn()
@@ -17,4 +18,10 @@ export class ActivityWithCustomer {
         default: 0,
     })
     invest_money: number; // 投资钱
+    @Column({
+        default: 0,
+    })
+    priority: number; //活动匹配度打分
+    @OneToMany(type => ContactRecord, record => record.relation)
+    records: ContactRecord[];
 }
