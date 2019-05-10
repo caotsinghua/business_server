@@ -16,7 +16,6 @@ export const aclAuthenticated = async (req: Req, res: Res, next: any) => {
     if (resource[resource.length - 1] === '/') {
         resource = resource.slice(0, -1);
     }
-    console.log({ resource });
     try {
         const job_number = req.session.passport.user;
         const user = await userRepository.findOne({ job_number });
@@ -26,7 +25,6 @@ export const aclAuthenticated = async (req: Req, res: Res, next: any) => {
             return next();
         }
         const isAllowed = await acl.isAllowed(user.id, resource, req.method.toLowerCase());
-        console.log({ isAllowed });
         if (!isAllowed) {
             res.apiError({
                 message: '权限不够',

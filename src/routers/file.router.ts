@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Req, Res } from '../types';
 import { upload, authenticated } from '../middlewares';
-import { getExcelAndParseToCustomers } from '../services/file.service';
+import { batchCustomersService } from '../services/file.service';
 import path from 'path';
 const fileRouter = Router();
 
@@ -11,16 +11,27 @@ fileRouter.post('/uploadCustomers', authenticated, async (req: Req, res: Res, ne
             if (err) {
                 next(err);
             } else {
-                const job_number = req.session.passport.user;
                 const { filename, path, mimetype, originalname } = req.file;
-                const result = await getExcelAndParseToCustomers(path);
+                const { key, data } = await batchCustomersService.parseExcelToCustomers(path);
                 res.apiSuccess({
-                    data: result,
+                    key,
+                    data,
                     filename,
                     originalname,
                 });
             }
         });
+    } catch (e) {
+        next(e);
+    }
+});
+
+fileRouter.post('/saveUploadedCustomers', authenticated, async (req: Req, res: Res, next: any) => {
+    try {
+        const { key } = req.body;
+        const job_number = req.session.passport.user;
+        const result = await batchCustomersService.saveCustomers(key, job_number);
+        res.apiSuccess(result);
     } catch (e) {
         next(e);
     }

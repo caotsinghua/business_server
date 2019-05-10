@@ -7,6 +7,7 @@ import {
     contactCustomer,
     customerJoinActivity,
 } from '../services/statistic.service';
+import { batchCustomersService } from '../services/file.service';
 const statisticRouter = Router();
 
 statisticRouter.get('/:activityId', async (req: Req, res: Res, next: any) => {
@@ -20,6 +21,16 @@ statisticRouter.get('/:activityId', async (req: Req, res: Res, next: any) => {
             customers,
             statistic,
         });
+    } catch (e) {
+        next(e);
+    }
+});
+
+statisticRouter.get('/:activityId/export', async (req: Req, res: Res, next: any) => {
+    try {
+        const { activityId } = req.params;
+        const file = await batchCustomersService.parseCustomersToExcel(activityId);
+        res.apiSuccess(file);
     } catch (e) {
         next(e);
     }

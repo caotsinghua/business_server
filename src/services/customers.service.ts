@@ -180,7 +180,7 @@ export async function createCustomer(
             phone_number,
             account,
         });
-        if (user.job && user.job.role === 'manager') {
+        if (user && user.job && user.job.role === 'manager') {
             customer.manager = user;
         }
         await manager.save(customer);
