@@ -4,7 +4,6 @@ import { User } from '../entities/User';
 
 // 权限管理中间件
 export const aclAuthenticated = async (req: Req, res: Res, next: any) => {
-
     const glob: Global = global;
     const acl = glob.acl;
     const userRepository = getRepository(User);
@@ -25,13 +24,16 @@ export const aclAuthenticated = async (req: Req, res: Res, next: any) => {
             return next();
         }
         const isAllowed = await acl.isAllowed(user.id, resource, req.method.toLowerCase());
+        console.log({
+            resource,
+            isAllowed,
+        });
         if (!isAllowed) {
             res.apiError({
                 message: '权限不够',
                 code: 403,
             });
         } else {
-            req.userInfo = user;
             return next();
         }
     } catch (e) {

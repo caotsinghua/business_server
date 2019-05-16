@@ -3,8 +3,8 @@ const aclConfig: any[] = [
         roles: ['leader'], //银行leader
         allows: [
             {
-                resources: ['/banks/:bankId'],
-                permissions: '*',
+                resources: ['/banks/:bankId', '/groupModels', '/activities'],
+                permissions: ['post', 'get'],
             },
         ],
     },
@@ -21,8 +21,12 @@ const aclConfig: any[] = [
         roles: ['manager'], // 客户经理
         allows: [
             {
-                resources: '*',
-                permissions: '*',
+                resources: [
+                    '/upload/uploadCustomers',
+                    '/upload/saveUploadedCustomers',
+                    '/upload/saveUploadedDepartmentCustomers',
+                ],
+                permissions: ['post'],
             },
         ],
     },

@@ -39,7 +39,7 @@ export async function getDepartmentCustomers({
     pageSize: number;
 }) {
     const departmentCustomerRepo = getRepository(DepartmentCustomer);
-    const total = departmentCustomerRepo.createQueryBuilder().getCount();
+    const total = await departmentCustomerRepo.createQueryBuilder().getCount();
     const data = await departmentCustomerRepo.find({
         relations: ['manager'],
         skip: (page - 1) * pageSize,

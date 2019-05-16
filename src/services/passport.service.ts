@@ -50,6 +50,7 @@ passport.use(
                     return done(null, false, { message: '用户还没有岗位，请联系主管设置。' });
                 }
                 delete user.password;
+                req.userInfo = user;
                 return done(null, user);
             } catch (error) {
                 return done(error, false);

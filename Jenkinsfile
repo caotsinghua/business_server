@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'node:8.12.0'
+            image 'tssword/node_yarn_pm2'
             args '-p 4000:4000'
         }
     }
@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'npm install'
+                sh 'yarn'
                 sh 'npm run build-ts'
             }
         }
@@ -25,7 +25,7 @@ pipeline {
         stage('deploy') {
             steps {
                 echo 'Deploying'
-                sh 'node dist/app.js'
+                sh 'pm2 start dist/app.js -n business_server'
             }
         }
     }
