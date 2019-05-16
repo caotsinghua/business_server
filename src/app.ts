@@ -21,6 +21,7 @@ import statisticRouter from './routers/statistic.router';
 import fileRouter from './routers/file.router';
 import recordsRouter from './routers/records.router';
 import mailRouter from './routers/mail.router';
+import chartRouter from './routers/chart.router';
 const app = express();
 
 const acl = new Acl(new Acl.memoryBackend());
@@ -62,6 +63,7 @@ app.use('/statistic', statisticRouter);
 app.use('/upload', fileRouter);
 app.use('/records', recordsRouter);
 app.use('/mail', mailRouter);
+app.use('/chart', chartRouter);
 // 错误处理
 app.use(handleError);
 
