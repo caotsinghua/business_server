@@ -234,7 +234,7 @@ export async function updateCustomer(
         },
     });
 
-    if ((user.job || user.job.role !== 'manager') && user.id !== 1)
+    if (user.job || (user.job.role !== 'manager' && user.id !== 1))
         throw { message: '该用户不是客户经理', code: 400 };
     const customer = await getRepository(Customer).findOne({
         relations: ['manager'],
@@ -289,7 +289,7 @@ export async function updateDepartmentCustomer(
             job_number,
         },
     });
-    if ((!user.job || user.job.role !== 'manager') && user.id !== 1)
+    if (!user.job || (user.job.role !== 'manager' && user.id !== 1))
         throw { message: '该用户不是客户经理', code: 400 };
     const departmentCustomer = await getRepository(DepartmentCustomer).findOne({
         relations: ['manager'],
