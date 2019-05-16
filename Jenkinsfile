@@ -25,7 +25,8 @@ pipeline {
         stage('deploy') {
             steps {
                 echo 'Deploying'
-                sh 'pm2 start dist/app.js -n business_server'
+                sh 'node dist/app.js'
+                // sh 'pm2 start dist/app.js -n business_server'
             }
         }
     }
