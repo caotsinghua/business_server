@@ -88,7 +88,13 @@ customersRouter.put(
     async (req: Req, res: Res, next: any) => {
         try {
             const { departmentCustomerId } = req.params;
-            const customer = await updateDepartmentCustomer(departmentCustomerId, req.body);
+            const job_number = req.session.passport.user;
+
+            const customer = await updateDepartmentCustomer(
+                job_number,
+                departmentCustomerId,
+                req.body,
+            );
             res.apiSuccess(customer);
         } catch (e) {
             next(e);
@@ -99,7 +105,8 @@ customersRouter.put(
 customersRouter.put('/:customerId', authenticated, async (req: Req, res: Res, next: any) => {
     try {
         const { customerId } = req.params;
-        const customer = await updateCustomer(customerId, req.body);
+        const job_number = req.session.passport.user;
+        const customer = await updateCustomer(job_number, customerId, req.body);
         res.apiSuccess(customer);
     } catch (e) {
         next(e);
