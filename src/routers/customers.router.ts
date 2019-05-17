@@ -11,6 +11,7 @@ import {
     createDepartmentCustomer,
     updateDepartmentCustomer,
     mockCustomers,
+    searchCustomer,
 } from '../services/customers.service';
 const customersRouter = Router();
 customersRouter.get('/', async (req: Req, res: Res, next: any) => {
@@ -43,6 +44,14 @@ customersRouter.get(
         }
     },
 );
+customersRouter.get('/search', async (req: Req, res: Res, next: any) => {
+    try {
+        const searchData = await searchCustomer(req.query.searchKey);
+        res.apiSuccess(searchData);
+    } catch (e) {
+        next(e);
+    }
+});
 customersRouter.get('/:customerId', async (req: Req, res: Res, next: any) => {
     try {
         const { customerId } = req.params;

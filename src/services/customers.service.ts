@@ -1,4 +1,4 @@
-import { getRepository, getManager } from 'typeorm';
+import { getRepository, getManager, Like } from 'typeorm';
 import { Customer } from '../entities/Customer';
 import { SEX } from '../types/enum';
 import { User } from '../entities/User';
@@ -329,4 +329,14 @@ export async function mockCustomers(number: number) {
             await manager.save(department);
         }
     });
+}
+
+export async function searchCustomer(searchKey: string) {
+    const data = await getRepository(Customer).find({
+        where: {
+            name: Like(`%${searchKey}%`),
+        },
+        take: 7,
+    });
+    return data;
 }

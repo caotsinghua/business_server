@@ -4,7 +4,7 @@ const aclConfig: any[] = [
         allows: [
             {
                 resources: ['/banks/:bankId', '/groupModels', '/activities'],
-                permissions: ['post', 'get'],
+                permissions: ['post', 'get', 'delete', 'put'],
             },
         ],
     },
