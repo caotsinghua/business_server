@@ -5,9 +5,10 @@
     "license": "MIT",
     "scripts": {
         "server": "nodemon app.js",
-        "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+        "start": "cross-env BUILD_ENV=development concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
         "build-ts": "tsc",
         "watch-ts": "tsc -w",
+        "build": "cross-env BUILD_ENV=production tsc",
         "watch-node": "nodemon --inspect dist/app.js",
         "doc": "apidoc -i dist/routers/ -o apidoc/",
         "start-dist": "node dist/app.js"
