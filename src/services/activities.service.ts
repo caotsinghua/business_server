@@ -226,7 +226,7 @@ export async function createMailRecord(
     },
 ) {
     const relation = await getRepository(ActivityWithCustomer).findOne({ customerId, activityId });
-    const from = '"招行营销" 1577499543@qq.com';
+    const from = '"盐城医院" 1577499543@qq.com';
     let record = getManager().create(ContactRecord, {
         type: 'email',
         relation,
